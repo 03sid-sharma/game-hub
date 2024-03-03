@@ -8,6 +8,7 @@ import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector";
 import GameHeading from "./components/GameHeading";
+import Bot from "./components/Bot";
 
 export interface GameQuery {
   genre: Genre | null;
@@ -63,6 +64,9 @@ function App() {
           </HStack>
         </Box>
         <GameGrid gameQuery={gameQuery} />
+      </GridItem>
+      <GridItem>
+        <Bot />
       </GridItem>
     </Grid>
   );
