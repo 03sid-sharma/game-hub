@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Modal,
@@ -22,6 +22,11 @@ const Bot = () => {
   const [messages, setMessages] = useState<String[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
   const { error, sendRequest, isLoading} = useGpt();
+ const messagesContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    messagesContainerRef.current?.scrollTo(0, messagesContainerRef.current?.scrollHeight);
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
@@ -91,7 +96,7 @@ const Bot = () => {
         >
           <ModalHeader>Ask Bard!</ModalHeader>
           <ModalCloseButton />
-          <ModalBody maxH="60vh" overflowY="auto">
+          <ModalBody maxH="60vh" overflowY="auto" ref={messagesContainerRef}>
             <VStack align="stretch" spacing={4}>
               {messages.map((message, index) => (
                 <div key={index} className="message">
