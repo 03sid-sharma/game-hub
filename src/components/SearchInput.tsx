@@ -15,7 +15,6 @@ const SearchInput = ({onSearch}:Props) => {
         event.preventDefault();
         if (ref.current) onSearch(ref.current.value);
       }}
-      
     >
       <InputGroup>
         <InputLeftElement children={<BsSearch />} />
@@ -24,6 +23,8 @@ const SearchInput = ({onSearch}:Props) => {
           borderRadius={20}
           placeholder="Search games..."
           variant="filled"
+          id="searchGames"
+          name="search"
         />
       </InputGroup>
     </form>

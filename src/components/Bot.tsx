@@ -11,16 +11,17 @@ import {
   VStack,
   Input,
   Text,
-  IconButton,
+  IconButton
 } from "@chakra-ui/react";
 import { ChatIcon } from "@chakra-ui/icons";
-import useGpt, { Candidate } from "../hooks/useGpt";
+import useGpt from "../hooks/useGpt";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const Bot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [messages, setMessages] = useState<String[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
-  const { error, sendRequest } = useGpt();
+  const { error, sendRequest, isLoading} = useGpt();
 
   const handleSendMessage = async () => {
     if (inputMessage.trim() === "") return;
@@ -29,7 +30,6 @@ const Bot = () => {
     const newMessages = [...messages, latestMsg];
     setMessages(newMessages);
 
-    // Send user's message to the useGpt hook
     const response = await sendRequest({
       contents: [
         {
@@ -50,6 +50,12 @@ const Bot = () => {
       setMessages(modifiedResponse);
     }
   };
+
+  const handleSubmit = (e:React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage();
+  };
+
   return (
     <>
       {error && <Text>{error}</Text>}
@@ -60,14 +66,14 @@ const Bot = () => {
         right="4"
         p={6}
         borderRadius="full"
-        bg="white" // Solid white color
-        color="black" // Black text color
+        bg="white"
+        color="black"
         boxShadow="lg"
         zIndex="999"
         aria-label="Chat with AI"
-        icon={<ChatIcon boxSize={8} color="black" />} // Icon color set to black
+        icon={<ChatIcon boxSize={8} color="black" />}
         _hover={{
-          bg: "gray.100", // Lighter color on hover
+          bg: "gray.100",
           transform: "scale(1.05)",
         }}
       />
@@ -85,7 +91,7 @@ const Bot = () => {
         >
           <ModalHeader>Ask Bard!</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody maxH="60vh" overflowY="auto">
             <VStack align="stretch" spacing={4}>
               {messages.map((message, index) => (
                 <div key={index} className="message">
@@ -93,18 +99,28 @@ const Bot = () => {
                 </div>
               ))}
             </VStack>
-            <Input
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              placeholder="Type your message..."
-              mt={2}
-            />
           </ModalBody>
-          <ModalFooter>
-            <Button onClick={handleSendMessage} bg="black" color="white">
-              Send
-            </Button>
-          </ModalFooter>
+          <form onSubmit={handleSubmit}>
+            <ModalFooter>
+              <Input
+                id="messageInput"
+                name="message"
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                placeholder="Type your message..."
+              />
+              <Button
+                type="submit"
+                bg="black"
+                color="white"
+                ml={2}
+                isLoading={isLoading}
+                spinner={<BeatLoader size={8} color="white" />}
+              >
+                Send
+              </Button>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>

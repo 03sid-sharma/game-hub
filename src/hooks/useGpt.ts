@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import apiGpt from "../services/api-gpt";
-import { AxiosRequestConfig, CanceledError } from "axios";
+import { CanceledError } from "axios";
 
 export interface GptRequest {
   contents: Content[];
@@ -30,14 +30,14 @@ const useGpt = (initialRequest?: GptRequest, deps?: any[]) => {
   const sendRequest = async (requestConfig: GptRequest) => {
     try {
       setLoading(true);
-      const response = await apiGpt.post<GptResponse[]>("", {
+      const response = await apiGpt.post<GptResponse>("", {
         ...requestConfig,
       });
       setLoading(false);
       return response.data;
     } catch (err) {
       if (err instanceof CanceledError) return null;
-      setError(err.message);
+      setError((err as Error).message);
       setLoading(false);
       return null;
     }
