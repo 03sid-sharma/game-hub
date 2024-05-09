@@ -10,12 +10,11 @@ import {
   ModalCloseButton,
   VStack,
   Input,
-  Text,
-  IconButton
+  Text
 } from "@chakra-ui/react";
-import { ChatIcon } from "@chakra-ui/icons";
 import useGpt from "../hooks/useGpt";
 import BeatLoader from "react-spinners/BeatLoader";
+import "./Bot.css";
 
 const Bot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -63,32 +62,33 @@ const Bot = () => {
 
   return (
     <>
-      {error && <Text>{error}</Text>}
-      <IconButton
-        onClick={() => setIsModalOpen(true)}
-        position="fixed"
-        bottom="4"
-        right="4"
-        p={6}
-        borderRadius="full"
-        bg="white"
-        color="black"
-        boxShadow="lg"
-        zIndex="999"
-        aria-label="Chat with AI"
-        icon={<ChatIcon boxSize={8} color="black" />}
-        _hover={{
-          bg: "gray.100",
-          transform: "scale(1.05)",
-        }}
-      />
+      <button className="btn" onClick={() => setIsModalOpen(!isModalOpen)}>
+        <svg
+          height="24"
+          width="24"
+          fill="#FFFFFF"
+          viewBox="0 0 24 24"
+          data-name="Layer 1"
+          id="Layer_1"
+          className="sparkle"
+        >
+          <path d="M10,21.236,6.755,14.745.264,11.5,6.755,8.255,10,1.764l3.245,6.491L19.736,11.5l-6.491,3.245ZM18,21l1.5,3L21,21l3-1.5L21,18l-1.5-3L18,18l-3,1.5ZM19.333,4.667,20.5,7l1.167-2.333L24,3.5,21.667,2.333,20.5,0,19.333,2.333,17,3.5Z"></path>
+        </svg>
 
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-        <ModalOverlay />
+        <span className="text">AI</span>
+      </button>
+
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(!isModalOpen)}>
+        <ModalOverlay
+          position="fixed"
+          bottom="0"
+          p={4}
+          borderRadius="md"
+        />
         <ModalContent
           position="fixed"
           bottom="0"
-          right="0"
+          right="6"
           p={4}
           borderRadius="md"
           bg="black"
@@ -103,6 +103,7 @@ const Bot = () => {
                   {message}
                 </div>
               ))}
+              {error && <Text>{error}</Text>}
             </VStack>
           </ModalBody>
           <form onSubmit={handleSubmit}>
