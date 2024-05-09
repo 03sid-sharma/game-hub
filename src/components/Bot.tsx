@@ -88,7 +88,7 @@ const Bot = () => {
         <ModalContent
           position="fixed"
           bottom="0"
-          right="6"
+          right="0"
           p={4}
           borderRadius="md"
           bg="black"
