@@ -12,13 +12,14 @@ import {
   Input,
   Text
 } from "@chakra-ui/react";
+import ReactMarkdown from 'react-markdown';
 import useGpt from "../hooks/useGpt";
 import BeatLoader from "react-spinners/BeatLoader";
 import "./Bot.css";
 
 const Bot = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [messages, setMessages] = useState<String[]>([]);
+  const [messages, setMessages] = useState<string[]>([]);
   const [inputMessage, setInputMessage] = useState<string>("");
   const { error, sendRequest, isLoading} = useGpt();
  const messagesContainerRef = useRef<HTMLDivElement | null>(null);
@@ -79,12 +80,7 @@ const Bot = () => {
       </button>
 
       <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(!isModalOpen)}>
-        <ModalOverlay
-          position="fixed"
-          bottom="0"
-          p={4}
-          borderRadius="md"
-        />
+        <ModalOverlay position="fixed" bottom="0" p={4} borderRadius="md" />
         <ModalContent
           position="fixed"
           bottom="0"
@@ -99,9 +95,9 @@ const Bot = () => {
           <ModalBody maxH="60vh" overflowY="auto" ref={messagesContainerRef}>
             <VStack align="stretch" spacing={4}>
               {messages.map((message, index) => (
-                <div key={index} className="message">
+                <ReactMarkdown key={index} className="message">
                   {message}
-                </div>
+                </ReactMarkdown>
               ))}
               {error && <Text>{error}</Text>}
             </VStack>
